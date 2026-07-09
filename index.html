@@ -197,7 +197,7 @@
 <body>
 
     <audio id="bg-music" loop>
-        <source src="NextTo.m4a" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <div class="app-wrapper" id="app">
@@ -247,17 +247,20 @@
         
         let currentPage = 0;
         const totalPages = pagesData.length;
-        let isMusicPlaying = false; // متغير للتأكد من تشغيل الموسيقى مرة واحدة فقط
+        let isMusicPlaying = false; 
 
-        // تشغيل الموسيقى عند أول تفاعل
+        // دالة تشغيل الموسيقى
         function startMusic() {
             if (!isMusicPlaying) {
-                bgMusic.play().catch(e => console.log("المتصفح منع التشغيل التلقائي حتى الآن"));
-                isMusicPlaying = true;
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                }).catch(e => {
+                    console.log("المتصفح يطلب تفاعل مباشر لتشغيل الصوت");
+                });
             }
         }
 
-        // تفعيل تشغيل الموسيقى عند لمس الشاشة أو النقر في أي مكان
+        // ربط تشغيل الموسيقى بأي نقرة أو لمسة على الشاشة
         document.body.addEventListener('click', startMusic, { once: true });
         document.body.addEventListener('touchstart', startMusic, { once: true });
 
@@ -305,7 +308,7 @@
                 pages[currentPage].classList.add('flipped');
                 currentPage++;
                 updateUI();
-                startMusic(); // محاولة تشغيل الصوت إذا نسي يضغط على الشاشة
+                startMusic(); // محاولة تشغيل الصوت عند تقليب الصفحة إذا لم تعمل بعد
             }
         }
 
@@ -314,6 +317,7 @@
                 currentPage--;
                 pages[currentPage].classList.remove('flipped');
                 updateUI();
+                startMusic();
             }
         }
 
